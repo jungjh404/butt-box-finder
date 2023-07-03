@@ -10,33 +10,66 @@
 </body>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=02065c4df61f6d4c6c8c7e862d8b4067"></script>
 
-<script>    
-    function getLocation() {
-        if (navigator.geolocation) { // GPS를 지원하면
-            navigator.geolocation.getCurrentPosition(function(position) {
-                return [position.coords.latitude, position.coords.longitude];
-            }, function(error) {
-                console.error(error);
-            }, {
-            enableHighAccuracy: false,
-            maximumAge: 0,
-            timeout: Infinity
-            });
-        } 
-        else {
-            alert('GPS를 지원하지 않습니다');
-            return [0, 0]
-        }
-    }
-    
-    let position = getLocation();
-
+<script>
     var container = document.getElementById('map');
-		var options = {
-			center: new kakao.maps.LatLng(position[0], position[1]),
-			level: 3
-		};
+    var options = {
+            center: new kakao.maps.LatLng(0, 0),
+            level: 3
+        };
 
     var map = new kakao.maps.Map(container, options);
+    
+    function getLocation() { 
+        if (navigator.geolocation) { // GPS를 지원하면 
+            navigator.geolocation.getCurrentPosition(function(position) { 
+                var moveLatLon = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(moveLatLon);
+
+                // 지도에 표시할 원을 생성합니다
+                var usr_circle = new kakao.maps.Circle({
+                    center : moveLatLon,  // 원의 중심좌표 입니다 
+                    radius: 5, // 미터 단위의 원의 반지름입니다 
+                    strokeWeight: 2, // 선의 두께입니다 
+                    strokeColor: '#000000', // 선의 색깔입니다
+                    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                    strokeStyle: 'solid', // 선의 스타일 입니다
+                    fillColor: '#2E2EFE', // 채우기 색깔입니다
+                    fillOpacity: 1.0  // 채우기 불투명도 입니다   
+                });
+
+                // 지도에 원을 표시합니다 
+                usr_circle.setMap(map);
+
+            }, function(error) { 
+                console.error(error); 
+            }, { 
+                enableHighAccuracy: false, 
+                maximumAge: 0, 
+                timeout: Infinity 
+            }); 
+        }  
+        else { 
+            alert('GPS를 지원하지 않습니다'); 
+        } 
+    } 
+    
+    getLocation(); // Initializing location
+
+    function drawmarker(lat, lon){
+        // 마커가 표시될 위치입니다 
+        var markerPosition  = new kakao.maps.LatLng(lat, lon);
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            position: markerPosition
+        });
+
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
+    }
+    // Marker Initializae
+    
+    drawmarker(37.297950, 126.972217);
+
+    
 </script>
 </html>
