@@ -10,19 +10,11 @@
 </body>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=02065c4df61f6d4c6c8c7e862d8b4067"></script>
 
-<script>
-    var container = document.getElementById('map');
-		var options = {
-			center: new kakao.maps.LatLng(33.450701, 126.570667),
-			level: 3
-		};
-
-    var map = new kakao.maps.Map(container, options);
-    
+<script>    
     function getLocation() {
         if (navigator.geolocation) { // GPS를 지원하면
             navigator.geolocation.getCurrentPosition(function(position) {
-                alert(position.coords.latitude + ' ' + position.coords.longitude);
+                return position.coords.latitude, position.coords.longitude;
             }, function(error) {
                 console.error(error);
             }, {
@@ -33,9 +25,18 @@
         } 
         else {
             alert('GPS를 지원하지 않습니다');
+            return 0, 0
         }
     }
     
-    getLocation();
+    let lat, long = getLocation();
+
+    var container = document.getElementById('map');
+		var options = {
+			center: new kakao.maps.LatLng(lat, long),
+			level: 3
+		};
+
+    var map = new kakao.maps.Map(container, options);
 </script>
 </html>
