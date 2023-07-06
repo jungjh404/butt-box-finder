@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <title>Butt Finder</title>
 </head>
 <body>
@@ -19,6 +20,8 @@
 
     var map = new kakao.maps.Map(container, options);
     
+    var size_dict = {1: 3, 2:5, 3: 7, 4: 15, 5: 30, 6: 50, 7: 100, 8: 200, 9: 400, 10: 800, 11: 1600, 12: 3200, 13: 6400, 14: 12800};
+
     function getLocation() { 
         if (navigator.geolocation) { // GPS를 지원하면 
             navigator.geolocation.getCurrentPosition(function(position) { 
@@ -26,14 +29,14 @@
                 map.setCenter(moveLatLon);
 
                 // 지도에 표시할 원을 생성합니다
-                var usr_circle = new kakao.maps.Circle({
+                usr_circle = new kakao.maps.Circle({
                     center : moveLatLon,  // 원의 중심좌표 입니다 
-                    radius: 5, // 미터 단위의 원의 반지름입니다 
-                    strokeWeight: 2, // 선의 두께입니다 
-                    strokeColor: '#000000', // 선의 색깔입니다
+                    radius: 7, // 미터 단위의 원의 반지름입니다 
+                    strokeWeight: 3, // 선의 두께입니다 
+                    strokeColor: '#FFFFFF', // 선의 색깔입니다
                     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
                     strokeStyle: 'solid', // 선의 스타일 입니다
-                    fillColor: '#2E2EFE', // 채우기 색깔입니다
+                    fillColor: '#FF0000', // 채우기 색깔입니다
                     fillOpacity: 1.0  // 채우기 불투명도 입니다   
                 });
 
@@ -55,6 +58,13 @@
     
     getLocation(); // Initializing location
 
+    kakao.maps.event.addListener(map, 'zoom_changed', function() {
+        var level = map.getLevel();
+        usr_circle.setOptions({
+            radius: size_dict[level]
+        });
+    });
+
     function drawmarker(lat, lon){
         // 마커가 표시될 위치입니다 
         var markerPosition  = new kakao.maps.LatLng(lat, lon);
@@ -66,8 +76,9 @@
         // 마커가 지도 위에 표시되도록 설정합니다
         marker.setMap(map);
     }
-    // Marker Initializae
+
     
+    // 담배 수거함 위치
     drawmarker(37.297950, 126.972217);
 
     
