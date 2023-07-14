@@ -28,7 +28,8 @@
             function(position){
                 var moveLatLon = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 map.setCenter(moveLatLon);
-
+                
+                usr_circle.setMap(null);
                 usr_circle = new kakao.maps.Circle({
                     center : moveLatLon,  // 원의 중심좌표 입니다 
                     radius: 7, // 미터 단위의 원의 반지름입니다 
